@@ -2,24 +2,18 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <ctime>
 
 #include "common.h"
 #include "VoronoiDiagram.h"
 
 static const int NUM_POINTS = 5;
 
-void cleanup();
-//OpenGL functions.
+//OpenGL callbacks.
 void initGL(int w, int h);
 void cbRender();
 void cbReshape(int w, int h);
 void cbKeyDown(unsigned char key, int x, int y);
-void cbKeyUp(unsigned char key, int x, int y);
-void cbSpecialKeyDown(int key, int x, int y);
-void cbSpecialKeyUp(int key, int x, int y);
 void cbMouseAction(int button, int state, int x, int y);
-void cbMouseMove(int x, int y);
 
 VoronoiDiagram* vorDiag;
 
@@ -39,15 +33,10 @@ void initGL(int w, int h)
   glutInitDisplayMode(GLUT_DEPTH | GLUT_RGBA | GLUT_DOUBLE);
   glutInitWindowSize(w, h);
   glutInitWindowPosition(50, 50);
-  glutCreateWindow("Voronoi");
+  glutCreateWindow("Cone Voronoi Diagram");
 
   glutKeyboardFunc(cbKeyDown);
-  glutKeyboardUpFunc(cbKeyUp);
-  glutSpecialFunc(cbSpecialKeyDown);
-  glutSpecialUpFunc(cbSpecialKeyUp);
   glutMouseFunc(cbMouseAction);
-  glutMotionFunc(cbMouseMove);
-  glutPassiveMotionFunc(cbMouseMove);
   glutReshapeFunc(cbReshape);
   glutDisplayFunc(cbRender);
   glutIdleFunc(cbRender);
@@ -71,6 +60,9 @@ void cbRender()
 
 void cbReshape(int w, int h)
 {
+  WIDTH = w;
+  HEIGHT = h;
+
   glViewport(0, 0, (GLsizei) w, (GLsizei) h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -85,8 +77,11 @@ void cbKeyDown(unsigned char key, int x, int y)
 {
   switch(key) {
   case 27:
-    cleanup();
+    delete vorDiag;
     exit(0);
+    break;
+  case 32:
+    vorDiag->setShowTop(!vorDiag->getShowTop());
     break;
   default:
     std::cout << "Key: " << key << std::endl;
@@ -94,41 +89,21 @@ void cbKeyDown(unsigned char key, int x, int y)
   }
 }
 
-void cbKeyUp(unsigned char key, int x, int y)
-{
-}
-
-void cbSpecialKeyDown(int key, int x, int y)
-{
-}
-
-void cbSpecialKeyUp(int key, int x, int y)
-{
-}
-
 void cbMouseAction(int button, int state, int x, int y)
 {
-  std::cout << button << " " << state << " (" << x << ", " << y << ")" << std::endl;
   y = HEIGHT - y;
+  
   switch(button) {
-  case 0:
-    if(state == 1) {
-      if(vorDiag->collisionTest((float) x / WIDTH, (float) y / HEIGHT) == -1)
+  case GLUT_LEFT_BUTTON:
+    if(state == GLUT_DOWN)
+      if(vorDiag->collisionTest((float) x / WIDTH, (float) y / HEIGHT) == -1) {
 	vorDiag->addPoint((float) x / WIDTH, (float) y / HEIGHT);
-    }
+	vorDiag->setShowTop(vorDiag->getShowTop());
+      }
     break;
-  case 2:
-    if(state == 1)
+  case GLUT_RIGHT_BUTTON:
+    if(state == GLUT_DOWN)
       vorDiag->removePoint(vorDiag->collisionTest((float) x / WIDTH, (float) y / HEIGHT));
     break;
   }
-}
-
-void cbMouseMove(int x, int y)
-{
-}
-
-void cleanup()
-{
-  delete vorDiag;
 }

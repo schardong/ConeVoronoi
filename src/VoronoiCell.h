@@ -9,10 +9,12 @@ class VoronoiCell
 private:
   Point* top;
   float color[3];
+  bool showTop;
 public:
   VoronoiCell(float x, float y, float z)
   {
     top = new Point(x, y, z);
+    showTop = true;
     memset(color, 0, sizeof(float) * 3);
   }
 
@@ -34,14 +36,25 @@ public:
     color[2] = b;
   }
 
+  bool getShowTop()
+  {
+    return showTop;
+  }
+
+  void setShowTop(bool show)
+  {
+    showTop = show;
+  }
+
   void render()
   {
     glPushMatrix();
     glTranslatef((*top)[0], (*top)[1], (*top)[2] - 1);
     glColor3f(color[0], color[1], color[2]);
-    glutSolidCone(1, 0.2, 48, 12);
+    glutSolidCone(2, 1, 48, 12);
     glPopMatrix();
-    top->render();
+    if(showTop == true)
+      top->render();
   }
 
   inline friend std::ostream& operator <<(std::ostream& _stream, const VoronoiCell& rhs)

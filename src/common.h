@@ -1,8 +1,8 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-static const int WIDTH = 600;
-static const int HEIGHT = 600;
+static int WIDTH = 600;
+static int HEIGHT = 600;
 
 static const int POINT_SIZE = 8;
 

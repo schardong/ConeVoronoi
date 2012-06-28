@@ -27,6 +27,17 @@ public:
     m_vCells.clear();
   }
 
+  bool getShowTop()
+  {
+    return m_vCells[0]->getShowTop();
+  }
+
+  void setShowTop(bool show)
+  {
+    for(auto it = m_vCells.begin(); it != m_vCells.end(); it++)
+      (*it)->setShowTop(show);
+  }
+
   int collisionTest(float x, float y)
   {
     for(unsigned int i = 0; i < m_vCells.size(); i++) {

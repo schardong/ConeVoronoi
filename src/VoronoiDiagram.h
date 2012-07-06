@@ -46,8 +46,7 @@ public:
       float sz_y = (float) POINT_SIZE / HEIGHT;
 
       if(x >= pt[0] - sz_x && x <= pt[0] + sz_x && y >= pt[1] - sz_y && y <= pt[1] + sz_y)
-	return i;
-
+	    return i;
     }
     return -1;
   }

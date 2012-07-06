@@ -6,7 +6,7 @@
 #include "common.h"
 #include "VoronoiDiagram.h"
 
-static const int NUM_POINTS = 5;
+static const int NUM_POINTS = 15;
 
 //OpenGL callbacks.
 void initGL(int w, int h);
@@ -97,8 +97,8 @@ void cbMouseAction(int button, int state, int x, int y)
   case GLUT_LEFT_BUTTON:
     if(state == GLUT_DOWN)
       if(vorDiag->collisionTest((float) x / WIDTH, (float) y / HEIGHT) == -1) {
-	vorDiag->addPoint((float) x / WIDTH, (float) y / HEIGHT);
-	vorDiag->setShowTop(vorDiag->getShowTop());
+	    vorDiag->addPoint((float) x / WIDTH, (float) y / HEIGHT);
+	    vorDiag->setShowTop(vorDiag->getShowTop());
       }
     break;
   case GLUT_RIGHT_BUTTON:
